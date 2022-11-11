@@ -1,0 +1,5 @@
+package organization
+
+func Price() {
+
+}
