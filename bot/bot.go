@@ -13,7 +13,7 @@ import (
 var (
 	Token          = os.Getenv("token")
 	MessageHandler func(s *discordgo.Session, m *discordgo.MessageCreate)
-	//Token          = "MTA0MDE1MjM0MTMxMzIyODgyMQ.GMBq5w.G98IXFwmtpeCrHPEvo4L2muMXWDzpJHmKirZhs"
+	
 )
 
 var (
