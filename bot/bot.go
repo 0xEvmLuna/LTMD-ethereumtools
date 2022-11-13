@@ -2,7 +2,6 @@ package bot
 
 import (
 	"discordbot/ethereumsupport"
-	"discordbot/ethereumsupport/defi"
 	"errors"
 	"fmt"
 	"os"
@@ -11,9 +10,8 @@ import (
 )
 
 var (
-	Token          = os.Getenv("token")
-	MessageHandler func(s *discordgo.Session, m *discordgo.MessageCreate)
-	//Token          = "MTA0MDE1MjM0MTMxMzIyODgyMQ.GMBq5w.G98IXFwmtpeCrHPEvo4L2muMXWDzpJHmKirZhs"
+	Token = os.Getenv("token")
+	//export token="MTA0MDE1MjM0MTMxMzIyODgyMQ.GrShxV.1Nt9G16uFvAbLx1920sYkF5rkSUWj87ZuM5zms"
 )
 
 var (
@@ -24,7 +22,6 @@ type Bot struct {
 	Discord   *discordgo.Session
 	ChannelId map[string]string
 	Client    *ethereumsupport.Provide
-	DefiToken *defi.DefiToken
 }
 
 func NewDiscordBot() (*Bot, error) {

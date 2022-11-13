@@ -61,13 +61,25 @@ func Get(url string, tlsEnable bool, header Headerhandler) *Request {
 	return request
 }
 
-/*
-func Post(url string, header Headerhandler, data []byte) *Request {
-	req := new(Request)
-
-	resp, err := http.NewRequest("POST", url, bytes.NewReader(data))
+func Post(url string, tlsEnable bool, header Headerhandler, data []byte) *Request {
+	request := new(Request)
+	fmt.Println(url)
+	req, err := http.NewRequest("POST", url, nil)
 	if err != nil {
-		req.ErrorMsg = err
+		request.ErrorMsg = err
+	}
+
+	var tr http.Transport
+	if tlsEnable {
+		tr = http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+		}
+	}
+
+	client := &http.Client{Timeout: 30 * time.Second, Transport: &tr}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
 	}
 	if val, ok := header[HeaderContent]; ok {
 		resp.Header.Add(HeaderContent, val)
@@ -82,7 +94,7 @@ func Post(url string, header Headerhandler, data []byte) *Request {
 	}
 
 	defer resp.Body.Close()
-	req.Response = resp
-	return req
+	request.Response = resp
+	request.Code = resp.StatusCode
+	return request
 }
-*/

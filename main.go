@@ -29,6 +29,7 @@ func StartDiscordServer() {
 
 	dc.Discord.AddHandler(dc.Faucet)
 	dc.Discord.AddHandler(dc.Defi)
+	dc.Discord.AddHandler(dc.Transfer)
 	err = dc.Discord.Open()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -38,14 +39,9 @@ func StartDiscordServer() {
 	fmt.Println("Bot is running !")
 
 	sc := make(chan os.Signal, 1)
-	signal.Notify(
-		sc,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGSEGV,
-		os.Interrupt,
-	)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, syscall.SIGSEGV, os.Interrupt)
 	<-sc
+
 	dc.Discord.Close()
 }
 
@@ -53,4 +49,18 @@ func main() {
 	StartDiscordServer()
 
 	//bot.Table()
+	/*
+		dc, err := bot.NewDiscordBot()
+		if err != nil {
+			fmt.Println(err)
+		}*/
+
+	/*
+		t := bot.NewTimerTask()
+		t.AddTask("@every 1s")
+		t.AddJob(bot.Second, func() { defi.DefiTrack() })
+		t.Start()*/
+
+	//result := defi.DefiTrack()
+	//fmt.Println(result.Change1d)
 }

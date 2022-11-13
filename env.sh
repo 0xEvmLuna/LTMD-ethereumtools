@@ -1,0 +1,11 @@
+export sendpoolA="0x6FE43f68f17024d41A5d0f774765c2B4f9d7F305"
+export sendPrivatekeyA="9aad317f6edcb1db275a1b6412faaa9193776157ef80f3cc740ca7b2d570436e"
+
+
+export sendpoolB="0x576833276D9C5878536613a9fA2b36290F56a2e1"
+export sendPrivatekeyB="0x2ee828008669c2a1d5cb8d74aac66c5c4777a0e158c1ec7b5839954655cca8a5"
+
+export sendpoolC="0x2797eD64486e2985BcbB71387601Aff96ad6e806"
+export sendPrivatekeyC="0xedec71d3a8adda3b3cfa1ec25a08f431f29e35e666f0ba8d9f5ee84f218f16cc"
+    
+export rpc="https://eth-mainnet.g.alchemy.com/v2/VVi0V9qBCIQ-YsGl6tg449zmGUgS0Xbk"

@@ -5,23 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
+	"sync"
 )
 
-type DefiToken struct {
-	Change1d      chan eth.Defi
-	Tvl           chan eth.Defi
-	LiquidityData chan eth.Defi
+type DefiTokens struct {
+	Change1d []eth.Defi
+	Change1h []eth.Defi
+	Change7d []eth.Defi
 }
 
-func NewDefi() *DefiToken {
-	return &DefiToken{
-		Change1d:      make(chan eth.Defi),
-		Tvl:           make(chan eth.Defi),
-		LiquidityData: make(chan eth.Defi),
-	}
-}
-
-func (dt *DefiToken) DefiTrack() {
+func DefiTrack() *DefiTokens {
 
 	resp := eth.Get("https://api.llama.fi/protocols", false, nil)
 
@@ -30,36 +23,43 @@ func (dt *DefiToken) DefiTrack() {
 		fmt.Println(err)
 	}
 
+	ch := make(chan eth.Defi, 5000)
+	//stop := make(chan bool)
+
 	for _, v := range result {
-		go TvlFilter(dt.Tvl, v)
-		go Liquidity(dt.LiquidityData, v)
-		go PriceChange(dt.Change1d, v)
+		ch <- v
 	}
 
+	var callback DefiTokens
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go priceChange(ch, &callback, &wg)
+
+	close(ch)
+	wg.Wait()
+
+	return &callback
 }
 
-func TvlFilter(ch chan<- eth.Defi, defi eth.Defi) {
-
-}
-
-func Liquidity(ch chan<- eth.Defi, defi eth.Defi) {
-
-}
-
-func PriceChange(ch chan<- eth.Defi, defi eth.Defi) {
+func priceChange(tokens <-chan eth.Defi, callback *DefiTokens, wg *sync.WaitGroup) {
 	decimal := func(value float64) float64 {
 		return math.Trunc(value*1e2+0.5) * 1e-1
 	}
 
-	if decimal(defi.Change1d) >= decimal(float64(30)) {
-		ch <- eth.Defi{
-			Id:       defi.Id,
-			Name:     defi.Name,
-			Symbol:   defi.Symbol,
-			Change1d: defi.Change1d,
-			Address:  defi.Address,
-			Url:      defi.Url,
+	defer wg.Done()
+	for t := range tokens {
+		if decimal(t.Change1d) >= decimal(float64(10)) || decimal(t.Change1h) <= decimal(float64(-10)) {
+			callback.Change1d = append(callback.Change1d, t)
 		}
-	}
 
+		if decimal(t.Change1h) >= decimal(float64(10)) || decimal(t.Change1h) <= decimal(float64(-10)) {
+			callback.Change1h = append(callback.Change1h, t)
+		}
+
+		if decimal(t.Change7d) >= decimal(float64(10)) || decimal(t.Change1h) <= decimal(float64(-10)) {
+			callback.Change7d = append(callback.Change7d, t)
+		}
+
+	}
 }

@@ -6,6 +6,7 @@ require (
 	github.com/bwmarrin/discordgo v0.26.1
 	github.com/cheynewallace/tabby v1.1.1
 	github.com/ethereum/go-ethereum v1.10.26
+	github.com/robfig/cron/v3 v3.0.1
 )
 
 require (
