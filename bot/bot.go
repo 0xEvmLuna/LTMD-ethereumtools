@@ -11,7 +11,6 @@ import (
 
 var (
 	Token = os.Getenv("token")
-	//export token="MTA0MDE1MjM0MTMxMzIyODgyMQ.GrShxV.1Nt9G16uFvAbLx1920sYkF5rkSUWj87ZuM5zms"
 )
 
 var (

@@ -43,7 +43,7 @@ func NewTimerTask() *TimerTask {
 }
 
 func (t *TimerTask) AddTask(spec string) {
-	t.Cron.AddFunc(spec, func() { fmt.Printf("Run: 任务开始%d\n", i) })
+	t.Cron.AddFunc(spec, func() { fmt.Printf("Run: 任务开始%d\n") })
 }
 
 func (t *TimerTask) AddJob(spec string, callback func()) {
